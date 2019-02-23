@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+    <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration"/>
+    <http:request-config name="HTTP_Request_Configuration" host="0.0.0.0" port="8081" doc:name="HTTP Request Configuration"/>
+    <flow name="FlowA">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/flowa" doc:name="HTTP"/>
+        <set-variable variableName="FV1" value="#[&quot;FV1&quot;]" doc:name="FV1"/>
+        <set-session-variable variableName="SV1" value="#[&quot;SV1&quot;]" doc:name="SV1"/>
+        <response>
+            <logger message="In FlowA Response: 				#[flowVars.FV1] #[sessionVars.SV1] #[flowVars.FV2] #[sessionVars.SV2]" level="INFO" doc:name="In FlowA Response: #[flowVars.FV1] #[sessionVars.SV1] #[flowVars.FV2] #[sessionVars.SV2]"/>
+        </response>
+        <logger message="Before HTTP Request in FlowA: 	#[flowVars.FV1] #[sessionVars.SV1] #[flowVars.FV2] #[sessionVars.SV2]" level="INFO" doc:name="Before HTTP Request in FlowA: #[flowVars.FV1] #[sessionVars.SV1] #[flowVars.FV2] #[sessionVars.SV2]"/>
+        <http:request config-ref="HTTP_Request_Configuration" path="/flowb" method="GET" doc:name="HTTP"/>
+        <logger message="After HTTP Request in FlowA:	#[flowVars.FV1] #[sessionVars.SV1] #[flowVars.FV2] #[sessionVars.SV2]" level="INFO" doc:name="After HTTP Request in FlowA: #[flowVars.FV1] #[sessionVars.SV1] #[flowVars.FV2] #[sessionVars.SV2]"/>
+        <set-payload value="#[&quot;FlowA Ends&quot;]" doc:name="FlowA Ends"/>
+    </flow>
+    <flow name="FlowB">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/flowb" doc:name="HTTP"/>
+        <set-variable variableName="FV2" value="#[&quot;FV2&quot;]" doc:name="FV2"/>
+        <set-session-variable variableName="SV2" value="#[&quot;SV2&quot;]" doc:name="SV2"/>
+        <response>
+            <logger message="FlowB Response: 				#[flowVars.FV1] #[sessionVars.SV1] #[flowVars.FV2] #[sessionVars.SV2]" level="INFO" doc:name="FlowB Response: #[flowVars.FV1] #[sessionVars.SV1] #[flowVars.FV2] #[sessionVars.SV2]"/>
+        </response>
+        <logger message="FlowB Request:					#[flowVars.FV1] #[sessionVars.SV1] #[flowVars.FV2] #[sessionVars.SV2]" level="INFO" doc:name="FlowB Request: #[flowVars.FV1] #[sessionVars.SV1] #[flowVars.FV2] #[sessionVars.SV2]"/>
+    </flow>
+</mule>

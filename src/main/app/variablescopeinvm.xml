@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd">
+
+
+	<flow name="FlowC">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/flowc" doc:name="HTTP"/>
+        <set-variable variableName="FV1" value="#[&quot;FV1&quot;]" doc:name="FV1"/>
+        <set-session-variable variableName="SV1" value="#[&quot;SV1&quot;]" doc:name="SV1"/>
+        <response>
+            <logger message="In FlowC Response:     #[flowVars.FV1] #[sessionVars.SV1] #[flowVars.FV2] #[sessionVars.SV2]" level="INFO" doc:name="In FlowC Response: #[flowVars.FV1] #[sessionVars.SV1] #[flowVars.FV2] #[sessionVars.SV2]"/>
+        </response>
+        <logger message="Before VM in FlowC:  #[flowVars.FV1] #[sessionVars.SV1] #[flowVars.FV2] #[sessionVars.SV2]" level="INFO" doc:name="Before VM in FlowC: #[flowVars.FV1] #[sessionVars.SV1] #[flowVars.FV2] #[sessionVars.SV2]"/>
+        <vm:outbound-endpoint exchange-pattern="one-way" path="flowd" doc:name="VM"/>
+        <logger message="After VM in FlowC: #[flowVars.FV1] #[sessionVars.SV1] #[flowVars.FV2] #[sessionVars.SV2]" level="INFO" doc:name="After VM in FlowC: #[flowVars.FV1] #[sessionVars.SV1] #[flowVars.FV2] #[sessionVars.SV2]"/>
+        <set-payload value="#[&quot;FlowC Ends&quot;]" doc:name="FlowC Ends"/>
+    </flow>
+    <flow name="FlowD">
+        <vm:inbound-endpoint exchange-pattern="one-way" path="flowd" doc:name="VM"/>
+        <set-variable variableName="FV2" value="#[&quot;FV2&quot;]" doc:name="FV2"/>
+        <set-session-variable variableName="SV2" value="#[&quot;SV2&quot;]" doc:name="SV2"/>
+        <response>
+            <logger message="FlowD Response:     #[flowVars.FV1] #[sessionVars.SV1] #[flowVars.FV2] #[sessionVars.SV2]" level="INFO" doc:name="FlowD Response: #[flowVars.FV1] #[sessionVars.SV1] #[flowVars.FV2] #[sessionVars.SV2]"/>
+        </response>
+        <logger message="FlowD Request:					#[flowVars.FV1] #[sessionVars.SV1] #[flowVars.FV2] #[sessionVars.SV2]" level="INFO" doc:name="FlowD Request: #[flowVars.FV1] #[sessionVars.SV1] #[flowVars.FV2] #[sessionVars.SV2]"/>
+    </flow>
+
+
+
+
+
+
+</mule>
