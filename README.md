@@ -1,6 +1,6 @@
 # variableScope
 
-## variableScope mule configuration output:
+## variableScope HTTP mule configuration output
 
 URL: http://localhost:8081/flowa
 
@@ -18,7 +18,7 @@ In FlowA Response: 				FV1 SV1 null null
 
 Session variable cannot be accessible to the another flow if it traverse through HTTP requestor. In this case flow/session variable both have same scope.
 
-## variableScopevm mule configuration output:
+## variableScope VM mule configuration output
 URL: http://localhost:8081/flowc
 
 Before VM in FlowC:  FV1 SV1 null null
@@ -35,7 +35,7 @@ FlowD Response:     null SV1 FV2 SV2
 
 Session variable can traverse through VM connector and accessible in another flow thru VM inbound endpoint. 
 
-### variablescopeinasync mule configuration output:
+## variablescope in async mule configuration output
 FlowE:     FV SV
 
 FlowF:     null SV
